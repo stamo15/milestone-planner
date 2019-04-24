@@ -1,3 +1,9 @@
+/**
+ * Login Servlet
+ *
+ * @author Tojosoa Ramarlina
+ */
+
 package servlet;
 
 import db.H2Milestone;
