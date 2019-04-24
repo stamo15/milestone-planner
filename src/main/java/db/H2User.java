@@ -27,6 +27,7 @@ public class H2User extends H2<User> {
                     "firstName VARCHAR(255) NOT NULL ," +
                     "lastName VARCHAR(255) NOT NULL ," +
                     "email VARCHAR(255) NOT NULL ," +
+                    "salt VARCHAR(255) NOT NULL ," +
                     "password VARCHAR(255) NOT NULL )" );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,12 +36,13 @@ public class H2User extends H2<User> {
 
     @Override
     public void add(User newItem) {
-        String addUserQuery = "INSERT INTO " + TABLE + " (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
+        String addUserQuery = "INSERT INTO " + TABLE + " (firstName, lastName, email, password, salt) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(addUserQuery)) {
             preparedStatement.setString(1, newItem.getFirstName());
             preparedStatement.setString(2, newItem.getLastName());
             preparedStatement.setString(3, newItem.getEmail());
-            preparedStatement.setString(4, newItem.getPassword());
+            preparedStatement.setString(4, HashingUtil.getHashedPassword(newItem.getPassword(), newItem.getSalt()));
+            preparedStatement.setString(5, newItem.getSalt());
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -50,7 +52,7 @@ public class H2User extends H2<User> {
 
     @Override
     public User find(int id) {
-        String findUserQuery = "SELECT id, firstName, lastName, email, password  FROM " + TABLE + " WHERE id = " + id;
+        String findUserQuery = "SELECT id, firstName, lastName, email, password, salt  FROM " + TABLE + " WHERE id = " + id;
         return findWith(findUserQuery);
     }
 
@@ -65,11 +67,11 @@ public class H2User extends H2<User> {
     }
 
     public User findByEmailPassword(String email, String password){
-        String findByEmailQuery = "SELECT id, firstName, lastName, email, password  FROM " + TABLE +
+        String findByEmailQuery = "SELECT id, firstName, lastName, email, password, salt  FROM " + TABLE +
                 " WHERE email = '" + email + "'";
 
         User user = findWith(findByEmailQuery);
-        if(user == null || !user.getPassword().equals(password)){
+        if(user == null || !user.getPassword().equals(HashingUtil.getHashedPassword(password, user.getSalt()))){
             return null;
         }
         return user;
@@ -86,7 +88,8 @@ public class H2User extends H2<User> {
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getString(5));
+                        resultSet.getString(5),
+                        resultSet.getString(6));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -96,7 +99,7 @@ public class H2User extends H2<User> {
 
     @Override
     public List<User> all() {
-        String listUsersQuery = "SELECT id, firstName, lastName, email, password  FROM" + TABLE;
+        String listUsersQuery = "SELECT id, firstName, lastName, email, password, salt  FROM" + TABLE;
         List<User> output = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(listUsersQuery)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -106,7 +109,8 @@ public class H2User extends H2<User> {
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getString(5)));
+                        resultSet.getString(5),
+                        resultSet.getString(6)));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
