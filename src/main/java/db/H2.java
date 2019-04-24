@@ -14,7 +14,7 @@ import java.util.List;
 public abstract class H2<T> {
     protected Connection connection;
     protected Server server;
-    public static final String DATABASE = "jdbc:h2:tcp://localhost/~/milestone_planner";
+    public static final String DATABASE = "jdbc:h2:mem:~/milestone_planner";
 
     static Connection getConnection(String database) throws ClassNotFoundException, SQLException {
         Class.forName("org.h2.Driver");
