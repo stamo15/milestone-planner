@@ -1,0 +1,175 @@
+body{
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 20px;
+}
+
+#index{
+    background: url("../images/bg_landing.jpg") no-repeat fixed;
+    position: relative;
+    background-size: cover;
+    color: white;
+}
+
+#index .main-container{
+    background-color: #222629b0;
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    width: 60%;
+    height: 80%;
+    padding: 15px;
+}
+
+#index .main-container .title h4 {
+    font-size: 1.2em;
+    color: #86c232;
+}
+
+#index .main-container .hero h1 {
+    text-transform: uppercase;
+    font-size: 2.5em;
+}
+
+#index .main-container .description {
+    color: lightgray;
+    font-size: 0.9em;
+}
+
+#index .main-container .description span {
+    font-weight: bold;
+    color: #86c232;
+}
+
+#login .tabs .tab li a{
+    font-weight: bold;
+}
+
+#login .tabs .tab a:focus, #login .tabs .tab a:focus.active {
+    background-color: #86c23229;
+}
+
+#login .tabs .indicator{
+    background-color: #86c232;
+}
+
+#login .row{
+    margin-bottom: 0px;
+}
+
+#login #registration-form, #login #login-form{
+    padding: 20px;
+}
+
+#login #registration-form, #login #login-form, #login ul {
+    background-color: #fff
+}
+
+/* label color */
+#login .input-field label {
+    color: #474b4f;
+}
+/* label focus color */
+#login .input-field input[type=text]:focus + label {
+    color: #86c232;
+}
+/* label underline focus color */
+#login .input-field input[type=text]:focus {
+    border-bottom: 1px solid #86c232;
+    box-shadow: 0 1px 0 0 #86c232;
+}
+
+/* icon prefix focus color */
+#login .input-field .prefix.active {
+    color: #86c232;
+}
+
+/* valid color */
+.input-field input[type=text].valid {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+}
+/* invalid color */
+.input-field input[type=text].invalid {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+}
+
+#dashboard header nav{
+    padding: 0 5px 0 5px;
+    background-color: #222629;
+}
+
+#dashboard .nav-wrapper form{
+    margin: auto;
+}
+
+@media only screen and (min-width: 601px){
+    #dashboard nav{
+        height: 80px;
+        line-height: 80px;
+    }
+}
+
+
+#dashboard .nav-wrapper .input-field{
+    padding-top: 10px;
+}
+
+#dashboard .nav-wrapper form #search{
+    height: 50px;
+}
+
+#dashboard header #dropdown-user {
+    width: 200px;
+}
+
+#dashboard main table{
+    width:100%;
+}
+
+#dashboard main table tbody {
+    display:block;
+    /*height: 400px;*/
+    min-height: 122px;
+    overflow:auto;
+}
+#dashboard main table thead, #dashboard main table tbody tr {
+    display:table;
+    width:95%;
+    table-layout:fixed;
+}
+#dashboard main table thead {
+    width: calc( 100% - 1em )
+}
+
+#dashboard .list-inline {
+    padding-left: 0;
+    margin-left: -5px;
+    list-style: none;
+}
+#dashboard .list-inline > li {
+    display: inline-block;
+    /*padding-right: 5px;*/
+    /*padding-left: 5px;*/
+}
+
+#dashboard main{
+    /*background: url("../images/parallax.jpg") no-repeat fixed;*/
+    background-color: steelblue;
+    background-size: cover;
+    color: white;
+}
+
+
+
+
+
+
+blockquote{
+    color: #61892f;
+    color: #86c232;
+    color: #222629;
+    color: #474b4f;
+    color: #6b6e70;
+}
