@@ -12,7 +12,7 @@ public class Project {
     private List<Milestone> milestones;
 
 
-    public Project(String name, int userId){
+  public Project(String name, int userId){
         this.name = name;
         this.milestones = new ArrayList<Milestone>();
         this.createdAt = Calendar.getInstance();
@@ -33,7 +33,8 @@ public class Project {
         this.createdAt = createdAt;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
