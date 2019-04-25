@@ -10,23 +10,29 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private String salt;
     private List<Project> projects;
+    private List<Milestone> sharedMilestones;
 
-    public User(String firstName, String lastName, String email, String password){
+    public User(String firstName, String lastName, String email, String password, String salt){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.salt = salt;
         this.projects = new ArrayList<Project>();
+        this.sharedMilestones = new ArrayList<Milestone>();
     }
 
-    public User(int id, String firstName, String lastName, String email, String password){
+    public User(int id, String firstName, String lastName, String email, String password, String salt){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.salt = salt;
         this.projects = new ArrayList<Project>();
+        this.sharedMilestones = new ArrayList<Milestone>();
     }
 
     @Override
@@ -74,11 +80,27 @@ public class User {
         this.password = password;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String password) {
+        this.salt = salt;
+    }
+
     public List<Project> getProjects() {
         return projects;
     }
 
     public void setProjects(List<Project> projects) {
         this.projects = projects;
+    }
+
+    public List<Milestone> getSharedMilestones() {
+        return sharedMilestones;
+    }
+
+    public void setSharedMilestones(List<Milestone> sharedMilestones) {
+        this.sharedMilestones = sharedMilestones;
     }
 }
