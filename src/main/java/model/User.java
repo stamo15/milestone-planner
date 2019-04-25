@@ -12,16 +12,17 @@ public class User {
     private String password;
     private List<Project> projects;
 
-    public User(String firstName, String lastName, String email, String password){
+
+    public User(int id, String firstName, String lastName, String email, String password){
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.projects = new ArrayList<Project>();
     }
-
-    public User(int id, String firstName, String lastName, String email, String password){
-        this.id = id;
+    
+    public User(String firstName, String lastName, String email, String password){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -50,9 +51,7 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
+    
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
@@ -60,6 +59,9 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+    public String getLastName() {
+        return lastName;
     }
 
     public void setEmail(String email) {
