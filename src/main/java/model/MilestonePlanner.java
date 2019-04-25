@@ -18,12 +18,13 @@ public class MilestonePlanner {
         return projects;
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
+  
 
     public H2Project getH2Project() {
         return h2Project;
+    }
+      public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 
     public void setH2Project(H2Project h2Project) {
