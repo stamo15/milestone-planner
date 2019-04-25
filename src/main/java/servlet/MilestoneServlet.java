@@ -32,7 +32,6 @@ public class MilestoneServlet extends HttpServlet {
         String description = request.getParameter("description");
         String priority = request.getParameter("priority");
         String dueDate = request.getParameter("dueDate");
-        System.out.println("Entered date: " + dueDate);
         String isCompleted = request.getParameter("isCompleted");
 
         String method = request.getParameter("_method");
@@ -63,6 +62,7 @@ public class MilestoneServlet extends HttpServlet {
         }
 
         User user = this.H2USER.find(userId);
+        user.setSharedMilestones(this.H2MILESTONE.findSharedMilestones(user.getId()));
         user.setProjects(this.H2PROJECT.findByUserId(user.getId()));
 
         for(Project project : user.getProjects()){
@@ -71,7 +71,6 @@ public class MilestoneServlet extends HttpServlet {
 
         request.setAttribute("user", user);
         request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
-
 
     }
 

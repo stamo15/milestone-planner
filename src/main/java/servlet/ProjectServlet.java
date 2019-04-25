@@ -45,6 +45,7 @@ public class ProjectServlet extends HttpServlet {
 
         User user = this.H2USER.find(userId);
         user.setProjects(this.H2PROJECT.findByUserId(user.getId()));
+        user.setSharedMilestones(this.H2MILESTONE.findSharedMilestones(user.getId()));
 
         for(Project project : user.getProjects()){
             project.setMilestones(this.H2MILESTONE.findByProjectId(project.getId()));
