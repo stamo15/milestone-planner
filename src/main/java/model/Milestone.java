@@ -11,6 +11,7 @@ public class Milestone {
     private boolean isCompleted;
     private Priority priority;
 
+    
     public Milestone(String description, Priority priority){
         this.description = description;
         this.priority = priority;
