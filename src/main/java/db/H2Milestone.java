@@ -25,6 +25,7 @@ public class H2Milestone extends H2<Milestone> {
         try{
             Statement statement = connection.createStatement();
 
+            //Creating milestones table
             statement.executeUpdate( "CREATE TABLE IF NOT EXISTS "+ TABLE + " (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY," +
                     "projectId INT NOT NULL ," +
@@ -34,6 +35,15 @@ public class H2Milestone extends H2<Milestone> {
                     "dueDate VARCHAR(25) NOT NULL," +
                     "isCompleted BOOL, " +
                     "FOREIGN KEY(projectId) REFERENCES projects(id) ON DELETE CASCADE)  " );
+
+            statement.executeUpdate( "CREATE TABLE IF NOT EXISTS milestone_sharings (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY," +
+                    "sharerUserId INT NOT NULL ," +
+                    "receiverUserId INT," +
+                    "milestoneId INT NOT NULL ," +
+                    "url VARCHAR(255) NOT NULL ," +
+                    "FOREIGN KEY(milestoneId) REFERENCES milestones(id) ON DELETE CASCADE," +
+                    "FOREIGN KEY(sharerUserId) REFERENCES users(id) ON DELETE CASCADE)  " );
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -74,7 +84,6 @@ public class H2Milestone extends H2<Milestone> {
             updateProjectQuery += ", completionDate = '"+ H2.getFormattedDate(Calendar.getInstance()) + "'";
         }
         updateProjectQuery += " WHERE id = " + id;
-        System.out.println("Update query: "+ updateProjectQuery);
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateProjectQuery)) {
             return preparedStatement.execute();
         } catch (SQLException e) {
@@ -134,6 +143,74 @@ public class H2Milestone extends H2<Milestone> {
             throw new RuntimeException(e);
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        return output;
+    }
+
+    public List<Milestone> findSharedMilestones(int userId) {
+        List<Integer> milestoneIds = findMilestoneIds(userId);
+        List<Milestone> output = new ArrayList<>();
+        for(int milestoneId : milestoneIds){
+            Milestone milestone = this.find(milestoneId);
+            if(milestone != null){
+                output.add(milestone);
+            }
+        }
+        return output;
+    }
+
+    public void addMilestoneSharing(int milestoneId, int userId) {
+        String url = HashingUtil.getHashedPassword(Integer.toString(milestoneId), "");
+
+        String addMilestoneSharingQuery = "INSERT INTO milestone_sharings " +
+                "(milestoneId, sharerUserId, url) " +
+                "VALUES (?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(addMilestoneSharingQuery)) {
+            preparedStatement.setInt(1, milestoneId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setString(3, url);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean addMilestoneReceiver(int receiverId, String url){
+        String listMilestoneIds = "SELECT id, sharerUserId, milestoneId, url FROM milestone_sharings";
+        int milestoneSharingId = -1;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(listMilestoneIds)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                if(resultSet.getString(4).equals(url)){
+                    milestoneSharingId = resultSet.getInt(1);
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if(milestoneSharingId == -1){
+            return false;
+        } else {
+            String updateMilestoneSharingQuery = "UPDATE milestone_sharings SET receiverUserId = '" + receiverId + "' WHERE id = " + milestoneSharingId;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateMilestoneSharingQuery)) {
+                return preparedStatement.execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public List<Integer> findMilestoneIds(int receiverId) {
+        String listMilestoneIds = "SELECT id, sharerUserId, milestoneId, url FROM milestone_sharings WHERE receiverUserId = " + receiverId;
+        List<Integer> output = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(listMilestoneIds)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                output.add(resultSet.getInt(3));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return output;
     }
