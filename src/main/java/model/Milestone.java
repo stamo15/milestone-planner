@@ -19,15 +19,7 @@ public class Milestone {
         this.isCompleted = false;
     }
 
-    public Milestone(int projectId, String description, Priority priority,
-                     Calendar dueDate, boolean isCompleted){
-        this.description = description;
-        this.priority = priority;
-        this.completionDate = null;
-        this.dueDate = dueDate;
-        this.isCompleted = isCompleted;
-        this.projectId = projectId;
-    }
+   
 
     public Milestone(int id, int projectId, String description, Priority priority,
                      Calendar completionDate, Calendar dueDate, boolean isCompleted){
@@ -38,6 +30,15 @@ public class Milestone {
         this.isCompleted = isCompleted;
         this.projectId = projectId;
         this.id = id;
+    }
+     public Milestone(int projectId, String description, Priority priority,
+                     Calendar dueDate, boolean isCompleted){
+        this.description = description;
+        this.priority = priority;
+        this.completionDate = null;
+        this.dueDate = dueDate;
+        this.isCompleted = isCompleted;
+        this.projectId = projectId;
     }
 
     public String getDescription() {
