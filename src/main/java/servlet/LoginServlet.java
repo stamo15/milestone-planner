@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/LoginServlet")
+
 public class LoginServlet extends HttpServlet {
     private final H2User H2USER = new H2User();
     private final H2Project H2PROJECT = new H2Project();
@@ -40,14 +41,15 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
             } else {
-                request.getRequestDispatcher("views/login.jsp").forward(request, response);
+            request.getRequestDispatcher("views/login.jsp").forward(request, response);
             }
-        } else { // User is already logged in and wants to log out
+        } else { // The user is already logged in and want's to log out
             request.getRequestDispatcher("views/index.jsp").forward(request, response);
         }
     }
 
     @Override
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         request.getRequestDispatcher("views/login.jsp").forward(request, response);
