@@ -1,5 +1,7 @@
 package model;
 
+import db.HashingUtil;
+
 import java.util.Calendar;
 
 public class Milestone {
@@ -94,5 +96,9 @@ public class Milestone {
 
     public void setProjectId(int id) {
         this.projectId = id;
+    }
+
+    public String getHash(){
+        return HashingUtil.getHashedPassword(Integer.toString(this.id), "");
     }
 }

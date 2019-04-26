@@ -124,7 +124,6 @@ public class H2Project extends H2<Project> {
                         resultSet.getString(3),
                         H2.setDate(resultSet.getString(4))));
             }
-            
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {

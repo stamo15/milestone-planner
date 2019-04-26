@@ -97,11 +97,227 @@
                     <%--No projects--%>
                     <c:when test="${countProjects == 0}">
                         <p style="margin: 0; text-align: center"><br>You have 0 projects.</p>
+                        <div class="row section container">
+                        <div class="col s4">
+                            <div class="col-content" style="overflow: auto;max-height: 400px; box-shadow: 0 15px 20px -15px rgba(0, 0, 0, 0.61), 0 55px 50px -35px rgba(0, 0, 0, 0.05), 0 85px 60px -25px rgba(0, 0, 0, 0.1)">
+                                <div class="responsive-table table-status-sheet">
+                                    <table class="border" style="background-color:#ffcdd2">
+                                        <thead>
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <p style="font-style: italic;">
+                                                        <c:out value="Shared milestones"/>
+                                                    </p>
+                                                    <small class="left">${user.getSharedMilestones().size()} miletones</small>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:choose>
+                                            <c:when test="${user.getSharedMilestones().size() == 0}">
+                                                <tr>
+                                                    <td>
+                                                        <p style="font-style: italic;">No milestones have been shared with you<br>Click below to paste milestone url</p>
+                                                    </td>
+                                                </tr>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:forEach items="${user.getSharedMilestones()}" var="milestone">
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row">
+                                                                <div class="col s12 m12">
+                                                                    <div class="card blue-grey darken-1">
+                                                                        <div class="card-content white-text">
+                                                                            <div class="card-title">
+                                                                                    ${milestone.getDescription()}
+                                                                                <c:choose>
+                                                                                    <c:when test="${milestone.getPriority().toString() == \"HIGH\"}">
+                                                                                        <span class="red badge right" style="color: white; border-radius: 7%; font-weight: bold">HIGH</span>
+                                                                                    </c:when>
+                                                                                    <c:when test="${milestone.getPriority().toString() == \"MEDIUM\"}">
+                                                                                        <span class="yellow badge right" style="color: white; border-radius: 7%; font-weight: bold">MEDIUM</span>
+                                                                                    </c:when>
+                                                                                    <c:otherwise>
+                                                                                        <span class="green badge right" style="color: white; border-radius: 7%; font-weight: bold">LOW</span>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                            </div>
+                                                                            <ul>
+                                                                                <li>
+                                                                                    <i class="material-icons">date_range</i>
+                                                                                    <small>Due date: <fmt:formatDate value="${milestone.getDueDate().getTime()}" pattern="yyyy-MM-dd"/></small>
+                                                                                </li>
+                                                                                <c:choose>
+                                                                                    <c:when test="${milestone.isCompleted() == true}">
+                                                                                        <li>
+                                                                                            <i class="material-icons">check_box</i>
+                                                                                            <small>Completed on: <fmt:formatDate value="${milestone.getCompletionDate().getTime()}" pattern="yyyy-MM-dd"/></small>
+                                                                                        </li>
+                                                                                    </c:when>
+                                                                                    <c:otherwise>
+                                                                                        <li>
+                                                                                            <i class="material-icons">check_box_outline_blank</i>
+                                                                                            <small>Not completed</small>
+                                                                                        </li>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <a  data-target="get-shared-milestone-modal${user.getId()}" href="!#" class="btn-floating btn-large waves-effect waves-light modal-trigger" style="bottom: 35px; float: right; right: 15px; background-color: #ffff8d"><i class="material-icons" style="color: black;">add</i></a>                                </div>
+                        <div id="get-shared-milestone-modal${user.getId()}" class="modal modal-fixed-footer teal-text">
+                            <div class="modal-content">
+                                <h2>Add a shared milestone</h2>
+                                <p>Enter the url below: </p>
+                                <div>
+                                    <form action="MilestoneSharingServlet" method="post">
+                                        <input type="hidden" name="id" value="${milestone.getId()}">
+                                        <input type="hidden" name="userId" value="${user.getId()}">
+                                        <input type="hidden" name="projectId" value="${project.getId()}">
+                                        <input type="hidden" name="_method" value="put">
+                                        <div class="input-field col s12">
+                                            <i class="material-icons prefix">link</i>
+                                            <input type="text" name="url" placeholder="Milestone description" id="url${milestone.getId()}">
+                                            <label for="url${milestone.getId()}">Milestone Description</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <button class="waves-effect waves-light btn btn-block light-green accent-4 modal-close" type="submit">Get milestone
+                                                <i class="material-icons right">send</i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     </c:when>
 
                     <c:otherwise>
+                        <p style="margin: 0; text-align: center">
                         <c:forEach var="i" begin = "0" end="${countProjects}" step="3">
                             <div class="row section container">
+                                <c:if test="${i == 0}">
+                                    <div class="col s4">
+                                        <div class="col-content" style="overflow: auto;max-height: 400px; box-shadow: 0 15px 20px -15px rgba(0, 0, 0, 0.61), 0 55px 50px -35px rgba(0, 0, 0, 0.05), 0 85px 60px -25px rgba(0, 0, 0, 0.1)">
+                                            <div class="responsive-table table-status-sheet">
+                                                <table class="border" style="background-color:#ffcdd2">
+                                                    <thead>
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <p style="font-style: italic;">
+                                                                    <c:out value="Shared milestones"/>
+                                                                </p>
+                                                                <small class="left">${user.getSharedMilestones().size()} miletones</small>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <c:choose>
+                                                        <c:when test="${user.getSharedMilestones().size() == 0}">
+                                                            <tr>
+                                                                <td>
+                                                                    <p style="font-style: italic;">No milestones have been shared with you<br>Click below to paste milestone url</p>
+                                                                </td>
+                                                            </tr>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:forEach items="${user.getSharedMilestones()}" var="milestone">
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            <div class="col s12 m12">
+                                                                                <div class="card blue-grey darken-1">
+                                                                                    <div class="card-content white-text">
+                                                                                        <div class="card-title">
+                                                                                                ${milestone.getDescription()}
+                                                                                            <c:choose>
+                                                                                                <c:when test="${milestone.getPriority().toString() == \"HIGH\"}">
+                                                                                                    <span class="red badge right" style="color: white; border-radius: 7%; font-weight: bold">HIGH</span>
+                                                                                                </c:when>
+                                                                                                <c:when test="${milestone.getPriority().toString() == \"MEDIUM\"}">
+                                                                                                    <span class="yellow badge right" style="color: white; border-radius: 7%; font-weight: bold">MEDIUM</span>
+                                                                                                </c:when>
+                                                                                                <c:otherwise>
+                                                                                                    <span class="green badge right" style="color: white; border-radius: 7%; font-weight: bold">LOW</span>
+                                                                                                </c:otherwise>
+                                                                                            </c:choose>
+                                                                                        </div>
+                                                                                        <ul>
+                                                                                            <li>
+                                                                                                <i class="material-icons">date_range</i>
+                                                                                                <small>Due date: <fmt:formatDate value="${milestone.getDueDate().getTime()}" pattern="yyyy-MM-dd"/></small>
+                                                                                            </li>
+                                                                                            <c:choose>
+                                                                                                <c:when test="${milestone.isCompleted() == true}">
+                                                                                                    <li>
+                                                                                                        <i class="material-icons">check_box</i>
+                                                                                                        <small>Completed on: <fmt:formatDate value="${milestone.getCompletionDate().getTime()}" pattern="yyyy-MM-dd"/></small>
+                                                                                                    </li>
+                                                                                                </c:when>
+                                                                                                <c:otherwise>
+                                                                                                    <li>
+                                                                                                        <i class="material-icons">check_box_outline_blank</i>
+                                                                                                        <small>Not completed</small>
+                                                                                                    </li>
+                                                                                                </c:otherwise>
+                                                                                            </c:choose>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <a  data-target="get-shared-milestone-modal${user.getId()}" href="!#" class="btn-floating btn-large waves-effect waves-light modal-trigger" style="bottom: 35px; float: right; right: 15px; background-color: #ffff8d"><i class="material-icons" style="color: black;">add</i></a>                                </div>
+                                    <div id="get-shared-milestone-modal${user.getId()}" class="modal modal-fixed-footer teal-text">
+                                        <div class="modal-content">
+                                            <h2>Add a shared milestone</h2>
+                                            <p>Enter the url below: </p>
+                                            <div>
+                                                <form action="MilestoneSharingServlet" method="post">
+                                                    <input type="hidden" name="id" value="${milestone.getId()}">
+                                                    <input type="hidden" name="userId" value="${user.getId()}">
+                                                    <input type="hidden" name="projectId" value="${project.getId()}">
+                                                    <input type="hidden" name="_method" value="put">
+                                                    <div class="input-field col s12">
+                                                        <i class="material-icons prefix">link</i>
+                                                        <input type="text" name="url" placeholder="Milestone description" id="url${milestone.getId()}">
+                                                        <label for="url${milestone.getId()}">Milestone Description</label>
+                                                    </div>
+                                                    <div class="input-field col s12">
+                                                        <button class="waves-effect waves-light btn btn-block light-green accent-4 modal-close" type="submit">Get milestone
+                                                            <i class="material-icons right">send</i>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+<%--                                    <c:set var="i" value="${i + 1}"/>--%>
+                                </c:if>
                             <c:forEach var="j" begin = "${i}" end="${i + 2}">
                                 <c:choose>
                                     <c:when test="${j < countProjects}">
@@ -168,7 +384,7 @@
                                                                                                                 </li>
                                                                                                                 <li>
                                                                                                                     <a data-target="share-milestone-modal${milestone.getId()}" href="!#" class="modal-trigger">
-                                                                                                                        <i class="material-icons">delete</i>Share milestone</a>
+                                                                                                                        <i class="material-icons">share</i>Share milestone</a>
                                                                                                                 </li>
                                                                                                                 <li>
                                                                                                                     <a data-target="delete-milestone-modal${milestone.getId()}" href="!#" class="modal-trigger">
@@ -209,6 +425,29 @@
                                                                                                     </c:choose>
                                                                                                 </ul>
                                                                                             </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div id="share-milestone-modal${milestone.getId()}" class="modal modal-fixed-footer teal-text">
+                                                                                    <div class="modal-content">
+                                                                                        <h2>Share milestone</h2>
+                                                                                        <div>
+                                                                                            <form action="MilestoneSharingServlet" method="post">
+                                                                                                <input type="hidden" name="id" value="${milestone.getId()}">
+                                                                                                <input type="hidden" name="userId" value="${user.getId()}">
+                                                                                                <input type="hidden" name="projectId" value="${project.getId()}">
+                                                                                                <input type="hidden" name="_method" value="post">
+                                                                                                <div class="input-field col s12">
+                                                                                                    <i class="material-icons prefix">link</i>
+                                                                                                    <input type="text" name="url" placeholder="Milestone url" id="url${milestone.getId()}" value="${milestone.getHash()}">
+                                                                                                    <label for="url${milestone.getId()}">Milestone url</label>
+                                                                                                </div>
+                                                                                                <div class="input-field col s12">
+                                                                                                    <button class="waves-effect waves-light btn btn-block light-green accent-4 modal-close" type="submit">URL copied
+                                                                                                        <i class="material-icons right">content_copy</i>
+                                                                                                    </button>
+                                                                                                </div>
+                                                                                            </form>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -279,7 +518,7 @@
                                                                                 </div>
                                                                                 <div id="delete-milestone-modal${milestone.getId()}" class="modal modal-fixed-footer teal-text">
                                                                                     <div class="modal-content">
-                                                                                        <h2>Delete project</h2>
+                                                                                        <h2>Delete milestone</h2>
                                                                                         <p>Are you sure you want to delete this milestone?</p>
                                                                                         <div>
                                                                                             <form action="MilestoneServlet" method="post">
