@@ -3,6 +3,7 @@ package servlet;
 import db.H2Milestone;
 import db.H2Project;
 import db.H2User;
+import db.HashingUtil;
 import model.User;
 
 import javax.servlet.ServletException;
@@ -31,7 +32,7 @@ public class RegistrationServlet extends HttpServlet {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
 
-            User user = new User(firstName, lastName, email,password);
+            User user = new User(firstName, lastName, email, password, HashingUtil.getNextSalt());
             this.H2USER.add(user);
 
             request.getRequestDispatcher("/LoginServlet").forward(request, response);

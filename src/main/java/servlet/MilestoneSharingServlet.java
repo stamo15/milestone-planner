@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/ProjectServlet")
-public class ProjectServlet extends HttpServlet {
+@WebServlet("/MilestoneSharingServlet")
+public class MilestoneSharingServlet extends HttpServlet {
     private final H2Project H2PROJECT = new H2Project();
     private final H2User H2USER = new H2User();
     private final H2Milestone H2MILESTONE = new H2Milestone();
@@ -23,35 +23,29 @@ public class ProjectServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
+        String method = request.getParameter("_method");
+
+        String url = request.getParameter("url");
         int userId = Integer.parseInt(request.getParameter("userId"));
 
-        String name = request.getParameter("name");
 
-        String method = request.getParameter("_method");
-        switch (method){
-            case "post":
-                Project project = new Project(name, userId);
-                this.H2PROJECT.add(project);
-                break;
-            case "put":
-                int id = Integer.parseInt(request.getParameter("id"));
-                this.H2PROJECT.update(id, name);
-                break;
-            case "delete":
-                id = Integer.parseInt(request.getParameter("id"));
-                this.H2PROJECT.remove(id);
-                break;
+        if(method.equals("post")){
+            int milestoneId = Integer.parseInt(request.getParameter("id"));
+            this.H2MILESTONE.addMilestoneSharing(milestoneId, userId);
+        }else{
+            this.H2MILESTONE.addMilestoneReceiver(userId, url);
         }
 
         User user = this.H2USER.find(userId);
-        user.setProjects(this.H2PROJECT.findByUserId(user.getId()));
         user.setSharedMilestones(this.H2MILESTONE.findSharedMilestones(user.getId()));
+        user.setProjects(this.H2PROJECT.findByUserId(user.getId()));
 
         for(Project project : user.getProjects()){
             project.setMilestones(this.H2MILESTONE.findByProjectId(project.getId()));
         }
+
         request.setAttribute("user", user);
         request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
-    }
 
+    }
 }
