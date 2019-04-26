@@ -11,6 +11,7 @@ public class User {
     private String email;
     private String password;
     private List<Project> projects;
+    private List<Milestone> sharedMilestone;
 
 
     public User(int id, String firstName, String lastName, String email, String password){
@@ -19,15 +20,19 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.salt = salt;
         this.projects = new ArrayList<Project>();
+        this.sharedMilestones = new ArrayList<Milestone>();
     }
     
-    public User(String firstName, String lastName, String email, String password){
+    public User(String firstName, String lastName, String email, String password, String salt){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.salt = salt;
         this.projects = new ArrayList<Project>();
+        this.sharedMilestones = new ArrayList<Milestone>();
     }
 
     @Override
@@ -86,3 +91,13 @@ public class User {
         this.projects = projects;
     }
 }
+public List<Milestone> getSharedMilestones(){
+return sharedMilestone;
+}
+public void setSharedMilestones(List<Milestone> sharedMilestones) {
+        this.sharedMilestones = sharedMilestones;
+    }
+}
+
+
+
