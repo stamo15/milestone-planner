@@ -58,10 +58,6 @@ public class Project {
         this.milestones = milestones;
     }
 
-   
-
-    
-    
      public int getId() {
         return id;
     }
